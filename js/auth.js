@@ -29,7 +29,7 @@ class AuthManager {
     }
 }
 
-// Mock data store
+// Enhanced DataStore with new features
 class DataStore {
     static getData() {
         return JSON.parse(localStorage.getItem('nirs_data')) || [
@@ -49,24 +49,18 @@ class DataStore {
         this.saveData(updatedData);
         return updatedData;
     }
-}
 
-// Navigation helper
-class Navigation {
-    static navigateTo(page) {
-        window.location.href = page;
+    // New method for analytics data
+    static getAnalyticsData() {
+        return JSON.parse(localStorage.getItem('nirs_analytics')) || {
+            predictions: [],
+            riskAssessments: [],
+            complianceChecks: []
+        };
     }
 
-    static setupNavigation() {
-        // Add active state to current page
-        const currentPage = window.location.pathname.split('/').pop();
-        const navLinks = document.querySelectorAll('[data-page]');
-        
-        navLinks.forEach(link => {
-            if (link.getAttribute('data-page') === currentPage) {
-                link.classList.add('active');
-            }
-        });
+    static saveAnalyticsData(data) {
+        localStorage.setItem('nirs_analytics', JSON.stringify(data));
     }
 }
 
@@ -102,41 +96,6 @@ class Navigation {
                 navMenu.classList.toggle('hidden');
             });
         }
-    }
-}
-
-// Enhanced DataStore with new features
-class DataStore {
-    static getData() {
-        return JSON.parse(localStorage.getItem('nirs_data')) || [
-            { transaction_id: 1, amount: 15000, risk_score: 0.2, timestamp: '2024-01-15T10:30:00Z', signature: 'signed_MTUwMDA', institution: 'Bank A' },
-            { transaction_id: 2, amount: 2500000, risk_score: 0.9, timestamp: '2024-01-15T11:15:00Z', signature: 'signed_MjUwMDAw', institution: 'Bank B' },
-            { transaction_id: 3, amount: 50000, risk_score: 0.4, timestamp: '2024-01-15T12:00:00Z', signature: 'signed_NTAwMDA', institution: 'Bank C' }
-        ];
-    }
-
-    static saveData(data) {
-        localStorage.setItem('nirs_data', JSON.stringify(data));
-    }
-
-    static addData(newData) {
-        const currentData = this.getData();
-        const updatedData = [...currentData, ...newData];
-        this.saveData(updatedData);
-        return updatedData;
-    }
-
-    // New method for analytics data
-    static getAnalyticsData() {
-        return JSON.parse(localStorage.getItem('nirs_analytics')) || {
-            predictions: [],
-            riskAssessments: [],
-            complianceChecks: []
-        };
-    }
-
-    static saveAnalyticsData(data) {
-        localStorage.setItem('nirs_analytics', JSON.stringify(data));
     }
 }
 
