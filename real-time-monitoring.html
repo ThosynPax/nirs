@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Monitoring - NIRS Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <nav class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <a href="dashboard.html" class="text-gray-500 hover:text-gray-700">← Back to Dashboard</a>
+                    <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">NIRS</span>
+                    </div>
+                    <h1 class="text-lg font-semibold text-gray-900">Real-time Monitoring</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-700" id="userName">Loading...</span>
+                    <button onclick="AuthManager.logout()" class="text-sm bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition-colors">Logout</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="mb-8 fade-in">
+            <h1 class="text-3xl font-bold text-gray-900">🚨 Real-time Monitoring</h1>
+            <p class="text-gray-600 mt-2">Live alerts and continuous surveillance system</p>
+        </div>
+
+        <!-- Live Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-red-500">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Live Alerts</p>
+                        <p class="text-2xl font-bold text-red-600" id="liveAlertCount">12</p>
+                    </div>
+                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                        <span class="text-red-600 text-xl">🚨</span>
+                    </div>
+                </div>
+                <div class="mt-2 text-sm text-green-600" id="alertTrend">↓ 3 from yesterday</div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-yellow-500">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Pending Reviews</p>
+                        <p class="text-2xl font-bold text-yellow-600" id="pendingReviews">8</p>
+                    </div>
+                    <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                        <span class="text-yellow-600 text-xl">⏳</span>
+                    </div>
+                </div>
+                <div class="mt-2 text-sm text-red-600" id="reviewTrend">↑ 2 new</div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-green-500">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Resolved Today</p>
+                        <p class="text-2xl font-bold text-green-600" id="resolvedToday">24</p>
+                    </div>
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                        <span class="text-green-600 text-xl">✅</span>
+                    </div>
+                </div>
+                <div class="mt-2 text-sm text-green-600" id="resolveTrend">↑ 18% efficiency</div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-blue-500">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Avg Response Time</p>
+                        <p class="text-2xl font-bold text-blue-600" id="responseTime">2.3m</p>
+                    </div>
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <span class="text-blue-600 text-xl">⚡</span>
+                    </div>
+                </div>
+                <div class="mt-2 text-sm text-green-600" id="responseTrend">↓ 0.4m faster</div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Live Alert Feed -->
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-semibold text-gray-900">Live Alert Feed</h2>
+                    <div class="flex items-center space-x-2">
+                        <span class="w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
+                        <span class="text-sm text-gray-600">LIVE</span>
+                    </div>
+                </div>
+                
+                <div class="border border-gray-200 rounded-lg h-96 overflow-y-auto">
+                    <div id="alertFeed" class="p-4 space-y-3">
+                        <!-- Alerts will stream here -->
+                    </div>
+                </div>
+
+                <div class="mt-4 flex space-x-2">
+                    <button onclick="pauseAlerts()" class="flex-1 bg-gray-600 text-white py-2 rounded">Pause Feed</button>
+                    <button onclick="clearAlerts()" class="flex-1 border border-gray-300 text-gray-700 py-2 rounded">Clear All</button>
+                </div>
+            </div>
+
+            <!-- Alert Analysis -->
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">Alert Analysis</h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="font-semibold text-gray-900 mb-2">Alert Types Distribution</h3>
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm">High Risk Transactions</span>
+                                <div class="w-32 bg-gray-200 rounded-full h-2">
+                                    <div class="bg-red-500 h-2 rounded-full" style="width: 45%"></div>
+                                </div>
+                                <span class="text-sm font-semibold">45%</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm">Suspicious Patterns</span>
+                                <div class="w-32 bg-gray-200 rounded-full h-2">
+                                    <div class="bg-yellow-500 h-2 rounded-full" style="width: 30%"></div>
+                                </div>
+                                <span class="text-sm font-semibold">30%</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm">Compliance Violations</span>
+                                <div class="w-32 bg-gray-200 rounded-full h-2">
+                                    <div class="bg-blue-500 h-2 rounded-full" style="width: 25%"></div>
+                                </div>
+                                <span class="text-sm font-semibold">25%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="font-semibold text-gray-900 mb-2">Quick Actions</h3>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="generateReport()" class="bg-blue-600 text-white py-2 rounded text-sm">Generate Report</button>
+                            <button onclick="escalateAlerts()" class="bg-red-600 text-white py-2 rounded text-sm">Escalate Critical</button>
+                            <button onclick="acknowledgeAll()" class="border border-gray-300 text-gray-700 py-2 rounded text-sm">Acknowledge All</button>
+                            <button onclick="configureAlerts()" class="border border-gray-300 text-gray-700 py-2 rounded text-sm">Configure</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/real-time-monitoring.js"></script>
+</body>
+</html>

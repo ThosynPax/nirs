@@ -1,0 +1,187 @@
+/* Custom styles to complement Tailwind */
+.risk-badge {
+    @apply px-3 py-1 rounded-full text-xs font-semibold;
+}
+
+.risk-badge.high {
+    @apply bg-red-100 text-red-800;
+}
+
+.risk-badge.medium {
+    @apply bg-yellow-100 text-yellow-800;
+}
+
+.risk-badge.low {
+    @apply bg-green-100 text-green-800;
+}
+
+.stat-card {
+    @apply bg-white rounded-xl shadow-sm p-6 border border-gray-100;
+}
+
+.nav-link {
+    @apply flex items-center space-x-2 px-4 py-3 rounded-lg transition-all duration-200;
+}
+
+.nav-link.active {
+    @apply bg-blue-50 text-blue-600 border border-blue-200;
+}
+
+.nav-link:not(.active) {
+    @apply text-gray-600 hover:bg-gray-50;
+}
+
+.json-input {
+    @apply font-mono text-sm;
+}
+
+.loading-spinner {
+    @apply inline-block w-6 h-6 border-2 border-blue-200 border-t-blue-600 rounded-full animate-spin;
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+    .mobile-stack {
+        @apply flex-col space-y-4;
+    }
+    
+    .mobile-full {
+        @apply w-full;
+    }
+}
+
+/* Enhanced styles for new features */
+
+/* Real-time monitoring animations */
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Fade in animations */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(20px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+/* Custom notification styles */
+.custom-notification {
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Progress bar animations */
+.progress-bar {
+    transition: width 0.5s ease-in-out;
+}
+
+/* API card hover effects */
+.api-card {
+    transition: all 0.3s ease;
+}
+
+.api-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Risk level badges */
+.risk-badge {
+    @apply px-3 py-1 rounded-full text-xs font-semibold;
+}
+
+.risk-badge.high {
+    @apply bg-red-100 text-red-800;
+}
+
+.risk-badge.medium {
+    @apply bg-yellow-100 text-yellow-800;
+}
+
+.risk-badge.low {
+    @apply bg-green-100 text-green-800;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+    .mobile-stack {
+        flex-direction: column;
+    }
+    
+    .mobile-full {
+        width: 100%;
+    }
+    
+    .mobile-text-center {
+        text-align: center;
+    }
+}
+
+/* Dark mode support (optional) */
+@media (prefers-color-scheme: dark) {
+    .dark\:bg-gray-900 {
+        background-color: #1a202c;
+    }
+    
+    .dark\:text-white {
+        color: white;
+    }
+}
+
+/* Print styles */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    .print-break {
+        page-break-after: always;
+    }
+}
+
+/* Loading states */
+.loading-state {
+    @apply opacity-50 pointer-events-none;
+}
+
+/* Custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}

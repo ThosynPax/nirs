@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIRS Platform - Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gradient-to-br from-blue-900 to-purple-800 min-h-screen flex items-center justify-center p-4">
+    <div class="max-w-md w-full">
+        <!-- Login Card -->
+        <div class="bg-white rounded-2xl shadow-xl p-8 fade-in">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span class="text-white text-2xl font-bold">N</span>
+                </div>
+                <h1 class="text-2xl font-bold text-gray-900">NIRS Platform</h1>
+                <p class="text-gray-600 mt-2">Nigeria Integrated Regulatory System</p>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="space-y-6">
+                <!-- Role Selection -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Select Role</label>
+                    <select id="roleSelect" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                        <option value="regulator">Regulatory Officer</option>
+                        <option value="admin">System Administrator</option>
+                        <option value="institution">Financial Institution</option>
+                    </select>
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                    <input 
+                        type="email" 
+                        id="emailInput"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                        placeholder="Enter your email"
+                        required
+                    >
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                    <input 
+                        type="password" 
+                        id="passwordInput"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                        placeholder="Enter your password"
+                        required
+                    >
+                </div>
+
+                <!-- Submit Button -->
+                <button 
+                    type="submit"
+                    class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-semibold"
+                >
+                    Sign In
+                </button>
+            </form>
+
+            <!-- Demo Accounts -->
+            <div class="mt-8 p-4 bg-gray-50 rounded-lg">
+                <h3 class="font-semibold text-gray-900 mb-3">Demo Accounts:</h3>
+                <div class="space-y-2 text-sm text-gray-600">
+                    <p>• <strong>Regulator:</strong> regulator@cbn.gov.ng / any password</p>
+                    <p>• <strong>Admin:</strong> admin@cbn.gov.ng / any password</p>
+                    <p>• <strong>Institution:</strong> bank@financial.com / any password</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const role = document.getElementById('roleSelect').value;
+            const email = document.getElementById('emailInput').value;
+            
+            // Mock authentication
+            const user = {
+                id: 1,
+                name: role === 'admin' ? 'System Administrator' : 
+                      role === 'regulator' ? 'Regulatory Officer' : 'Financial Institution User',
+                email: email,
+                role: role,
+                institution: role === 'institution' ? 'Bank A' : 'Central Bank of Nigeria'
+            };
+            
+            AuthManager.setCurrentUser(user);
+            window.location.href = 'dashboard.html';
+        });
+
+        // Auto-fill demo emails based on role
+        document.getElementById('roleSelect').addEventListener('change', function() {
+            const role = this.value;
+            const emailMap = {
+                'regulator': 'regulator@cbn.gov.ng',
+                'admin': 'admin@cbn.gov.ng',
+                'institution': 'bank@financial.com'
+            };
+            document.getElementById('emailInput').value = emailMap[role];
+        });
+
+        // Trigger initial email fill
+        document.getElementById('roleSelect').dispatchEvent(new Event('change'));
+    </script>
+</body>
+</html>

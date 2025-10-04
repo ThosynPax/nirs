@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Marketplace - NIRS Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <nav class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <a href="dashboard.html" class="text-gray-500 hover:text-gray-700">← Back to Dashboard</a>
+                    <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">NIRS</span>
+                    </div>
+                    <h1 class="text-lg font-semibold text-gray-900">API Marketplace</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-700" id="userName">Loading...</span>
+                    <button onclick="AuthManager.logout()" class="text-sm bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition-colors">Logout</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="mb-8 fade-in">
+            <h1 class="text-3xl font-bold text-gray-900">🛒 API Marketplace</h1>
+            <p class="text-gray-600 mt-2">Discover and integrate regulatory APIs and services</p>
+        </div>
+
+        <!-- Search and Filters -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="md:col-span-2">
+                    <input 
+                        type="text" 
+                        id="apiSearch"
+                        placeholder="Search APIs by name, category, or description..."
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    >
+                </div>
+                <div>
+                    <select id="categoryFilter" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="">All Categories</option>
+                        <option value="risk">Risk Assessment</option>
+                        <option value="compliance">Compliance</option>
+                        <option value="data">Data Services</option>
+                        <option value="monitoring">Monitoring</option>
+                    </select>
+                </div>
+                <div>
+                    <select id="pricingFilter" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="">All Pricing</option>
+                        <option value="free">Free</option>
+                        <option value="paid">Paid</option>
+                        <option value="enterprise">Enterprise</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <!-- API Listings -->
+            <div class="lg:col-span-3">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="apiListings">
+                    <!-- API cards will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="space-y-6">
+                <!-- My Subscriptions -->
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">📡 My Subscriptions</h3>
+                    <div id="mySubscriptions" class="space-y-3">
+                        <!-- Subscriptions will appear here -->
+                    </div>
+                </div>
+
+                <!-- API Usage -->
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">📊 API Usage</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span>Requests Today</span>
+                                <span class="font-semibold" id="requestsToday">0</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-500 h-2 rounded-full" id="requestsBar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span>Monthly Limit</span>
+                                <span class="font-semibold" id="monthlyLimit">1,000</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-blue-500 h-2 rounded-full" id="monthlyBar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">⚡ Quick Actions</h3>
+                    <div class="space-y-2">
+                        <button onclick="generateApiKey()" class="w-full bg-indigo-600 text-white py-2 rounded text-sm">
+                            Generate API Key
+                        </button>
+                        <button onclick="viewDocumentation()" class="w-full border border-indigo-600 text-indigo-600 py-2 rounded text-sm">
+                            API Documentation
+                        </button>
+                        <button onclick="manageBilling()" class="w-full border border-gray-600 text-gray-600 py-2 rounded text-sm">
+                            Billing & Plans
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- API Detail Modal -->
+    <div id="apiModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-start mb-4">
+                    <h2 class="text-2xl font-bold text-gray-900" id="modalApiName">API Name</h2>
+                    <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">✕</button>
+                </div>
+                <div id="modalApiContent">
+                    <!-- Modal content will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/api-marketplace.js"></script>
+</body>
+</html>

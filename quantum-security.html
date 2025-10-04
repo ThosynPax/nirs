@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Security - NIRS Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <nav class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <a href="dashboard.html" class="text-gray-500 hover:text-gray-700">← Back to Dashboard</a>
+                    <div class="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">NIRS</span>
+                    </div>
+                    <h1 class="text-lg font-semibold text-gray-900">Quantum Security</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-700" id="userName">Loading...</span>
+                    <button onclick="AuthManager.logout()" class="text-sm bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition-colors">Logout</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="mb-8 fade-in">
+            <h1 class="text-3xl font-bold text-gray-900">🔐 Quantum-Resistant Security</h1>
+            <p class="text-gray-600 mt-2">Post-quantum cryptography and advanced security measures</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Main Content -->
+            <div class="lg:col-span-2">
+                <!-- Security Status -->
+                <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">Security Status</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div class="border border-green-200 rounded-lg p-4 bg-green-50">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-semibold text-green-900">Post-Quantum Algorithms</span>
+                                <span class="text-green-600">✅ Active</span>
+                            </div>
+                            <div class="text-sm text-green-800">
+                                <div>• Kyber-1024: Active</div>
+                                <div>• Dilithium-5: Active</div>
+                                <div>• Falcon-1024: Active</div>
+                            </div>
+                        </div>
+
+                        <div class="border border-green-200 rounded-lg p-4 bg-green-50">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-semibold text-green-900">Key Management</span>
+                                <span class="text-green-600">✅ Automated</span>
+                            </div>
+                            <div class="text-sm text-green-800">
+                                <div>• Key Rotation: Every 24h</div>
+                                <div>• Last Rotation: 2 hours ago</div>
+                                <div>• Next Rotation: 22h</div>
+                            </div>
+                        </div>
+
+                        <div class="border border-yellow-200 rounded-lg p-4 bg-yellow-50">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-semibold text-yellow-900">Quantum Risk Assessment</span>
+                                <span class="text-yellow-600">🔄 Monitoring</span>
+                            </div>
+                            <div class="text-sm text-yellow-800">
+                                <div>• Threat Level: Medium</div>
+                                <div>• Last Assessment: Today</div>
+                                <div>• Next Assessment: 7 days</div>
+                            </div>
+                        </div>
+
+                        <div class="border border-blue-200 rounded-lg p-4 bg-blue-50">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-semibold text-blue-900">Encryption Strength</span>
+                                <span class="text-blue-600">🔒 256-bit</span>
+                            </div>
+                            <div class="text-sm text-blue-800">
+                                <div>• Current: AES-256</div>
+                                <div>• Quantum-safe: Active</div>
+                                <div>• Compliance: 100%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Migration Progress -->
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">Migration Progress</h2>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium text-gray-900">Legacy Systems</span>
+                                <span class="text-sm text-gray-600" id="legacyProgress">65%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                <div class="bg-yellow-500 h-3 rounded-full transition-all duration-500" style="width: 65%"></div>
+                            </div>
+                            <div class="text-xs text-gray-500 mt-1">Systems still using traditional cryptography</div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium text-gray-900">Quantum-Resistant Systems</span>
+                                <span class="text-sm text-gray-600" id="quantumProgress">35%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                <div class="bg-green-500 h-3 rounded-full transition-all duration-500" style="width: 35%"></div>
+                            </div>
+                            <div class="text-xs text-gray-500 mt-1">Systems upgraded to post-quantum cryptography</div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium text-gray-900">Hybrid Systems</span>
+                                <span class="text-sm text-gray-600" id="hybridProgress">45%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                <div class="bg-blue-500 h-3 rounded-full transition-all duration-500" style="width: 45%"></div>
+                            </div>
+                            <div class="text-xs text-gray-500 mt-1">Systems using both traditional and quantum-safe algorithms</div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex space-x-3">
+                        <button onclick="accelerateMigration()" class="bg-teal-600 text-white px-6 py-2 rounded hover:bg-teal-700">
+                            Accelerate Migration
+                        </button>
+                        <button onclick="generateMigrationReport()" class="border border-teal-600 text-teal-600 px-6 py-2 rounded hover:bg-teal-50">
+                            Generate Report
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="space-y-6">
+                <!-- Threat Assessment -->
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">⚠️ Threat Assessment</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">Quantum Computing Timeline</span>
+                            <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">5-10 years</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">Data Exposure Risk</span>
+                            <span class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">High</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">Migration Urgency</span>
+                            <span class="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded">Critical</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">Compliance Deadline</span>
+                            <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">2026</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Actions -->
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">🛡️ Security Actions</h3>
+                    <div class="space-y-3">
+                        <button onclick="rotateKeys()" class="w-full bg-teal-600 text-white py-2 rounded text-sm hover:bg-teal-700">
+                            Rotate Encryption Keys
+                        </button>
+                        <button onclick="runSecurityAudit()" class="w-full border border-teal-600 text-teal-600 py-2 rounded text-sm hover:bg-teal-50">
+                            Run Security Audit
+                        </button>
+                        <button onclick="updateAlgorithms()" class="w-full border border-gray-600 text-gray-600 py-2 rounded text-sm hover:bg-gray-50">
+                            Update Algorithms
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Algorithm Status -->
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">🔧 Algorithm Status</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center text-sm">
+                            <span>Kyber-1024</span>
+                            <span class="text-green-600">Active</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span>Dilithium-5</span>
+                            <span class="text-green-600">Active</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span>Falcon-1024</span>
+                            <span class="text-green-600">Active</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span>SPHINCS+</span>
+                            <span class="text-yellow-600">Testing</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quantum Readiness Assessment -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mt-8">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">📊 Quantum Readiness Assessment</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="text-center p-4 border border-gray-200 rounded-lg">
+                    <div class="text-2xl font-bold text-green-600 mb-2">85%</div>
+                    <div class="text-sm font-medium text-gray-900">Infrastructure</div>
+                    <div class="text-xs text-gray-600">Quantum-ready systems</div>
+                </div>
+                
+                <div class="text-center p-4 border border-gray-200 rounded-lg">
+                    <div class="text-2xl font-bold text-yellow-600 mb-2">70%</div>
+                    <div class="text-sm font-medium text-gray-900">Data Protection</div>
+                    <div class="text-xs text-gray-600">Encrypted data at rest</div>
+                </div>
+                
+                <div class="text-center p-4 border border-gray-200 rounded-lg">
+                    <div class="text-2xl font-bold text-blue-600 mb-2">90%</div>
+                    <div class="text-sm font-medium text-gray-900">Communications</div>
+                    <div class="text-xs text-gray-600">Secure channels</div>
+                </div>
+                
+                <div class="text-center p-4 border border-gray-200 rounded-lg">
+                    <div class="text-2xl font-bold text-red-600 mb-2">60%</div>
+                    <div class="text-sm font-medium text-gray-900">Legacy Systems</div>
+                    <div class="text-xs text-gray-600">Requiring upgrade</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/quantum-security.js"></script>
+</body>
+</html>

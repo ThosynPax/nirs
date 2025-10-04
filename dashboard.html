@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - NIRS Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">NIRS</span>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-semibold text-gray-900">Regulatory Platform</h1>
+                        <p class="text-xs text-gray-500" id="userRole">Loading...</p>
+                    </div>
+                </div>
+
+                <!-- User Menu -->
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-700" id="userName">Loading...</span>
+                    <button onclick="AuthManager.logout()" class="text-sm bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition-colors">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Page Header -->
+        <div class="mb-8 fade-in">
+            <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
+            <p class="text-gray-600 mt-2" id="welcomeMessage">Welcome back</p>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="stat-card">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Total Transactions</p>
+                        <p class="text-2xl font-bold text-gray-900" id="totalTransactions">0</p>
+                    </div>
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <span class="text-blue-600 text-xl">📊</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">High Risk Alerts</p>
+                        <p class="text-2xl font-bold text-red-600" id="highRiskCount">0</p>
+                    </div>
+                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                        <span class="text-red-600 text-xl">⚠️</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Connected Institutions</p>
+                        <p class="text-2xl font-bold text-gray-900" id="institutionCount">0</p>
+                    </div>
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                        <span class="text-green-600 text-xl">🏛️</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Compliance Rate</p>
+                        <p class="text-2xl font-bold text-gray-900" id="complianceRate">0%</p>
+                    </div>
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <span class="text-purple-600 text-xl">✅</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 mb-6">Quick Actions</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <a href="data-ingestion.html" class="nav-link text-center p-4 border-2 border-dashed border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-all duration-200">
+                    <div class="text-2xl mb-2">📥</div>
+                    <span class="font-medium text-gray-700">Data Ingestion</span>
+                </a>
+                <a href="ai-analysis.html" class="nav-link text-center p-4 border-2 border-dashed border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-all duration-200">
+                    <div class="text-2xl mb-2">🤖</div>
+                    <span class="font-medium text-gray-700">AI Analysis</span>
+                </a>
+                <a href="digital-assets.html" class="nav-link text-center p-4 border-2 border-dashed border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-all duration-200">
+                    <div class="text-2xl mb-2">🔗</div>
+                    <span class="font-medium text-gray-700">Digital Assets</span>
+                </a>
+                <a href="reports.html" class="nav-link text-center p-4 border-2 border-dashed border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-all duration-200">
+                    <div class="text-2xl mb-2">📊</div>
+                    <span class="font-medium text-gray-700">Reports</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Enhanced Quick Actions -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 mb-6">Advanced Features</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <a href="real-time-monitoring.html" class="nav-link text-center p-4 border-2 border-dashed border-gray-200 rounded-lg hover:border-red-300 hover:bg-red-50 transition-all duration-200">
+                    <div class="text-2xl mb-2">🚨</div>
+                    <span class="font-medium text-gray-700 text-sm">Live Monitoring</span>
+                </a>
+                <a href="predictive-analytics.html" class="nav-link text-center p-4 border-2 border-dashed border-gray-200 rounded-lg hover:border-purple-300 hover:bg-purple-50 transition-all duration-200">
+                    <div class="text-2xl mb-2">🔮</div>
+                    <span class="font-medium text-gray-700 text-sm">Predictive AI</span>
+                </a>
+                <a href="regulatory-sandbox.html" class="nav-link text-center p-4 border-2 border-dashed border-gray-200 rounded-lg hover:border-green-300 hover:bg-green-50 transition-all duration-200">
+                    <div class="text-2xl mb-2">🧪</div>
+                    <span class="font-medium text-gray-700 text-sm">Sandbox</span>
+                </a>
+                <a href="cross-border-hub.html" class="nav-link text-center p-4 border-2 border-dashed border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-all duration-200">
+                    <div class="text-2xl mb-2">🌍</div>
+                    <span class="font-medium text-gray-700 text-sm">Cross-border</span>
+                </a>
+                <a href="nlp-analysis.html" class="nav-link text-center p-4 border-2 border-dashed border-gray-200 rounded-lg hover:border-orange-300 hover:bg-orange-50 transition-all duration-200">
+                    <div class="text-2xl mb-2">📝</div>
+                    <span class="font-medium text-gray-700 text-sm">NLP Analysis</span>
+                </a>
+                <a href="api-marketplace.html" class="nav-link text-center p-4 border-2 border-dashed border-gray-200 rounded-lg hover:border-indigo-300 hover:bg-indigo-50 transition-all duration-200">
+                    <div class="text-2xl mb-2">🛒</div>
+                    <span class="font-medium text-gray-700 text-sm">API Hub</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Recent Activity & System Status -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Recent Activity -->
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <h2 class="text-xl font-semibold text-gray-900 mb-6">Recent Activity</h2>
+                <div class="space-y-4" id="recentActivity">
+                    <!-- Activities will be loaded here -->
+                </div>
+            </div>
+
+            <!-- System Status -->
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <h2 class="text-xl font-semibold text-gray-900 mb-6">System Status</h2>
+                <div class="space-y-4" id="systemStatus">
+                    <!-- Status items will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation for Mobile -->
+    <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-2">
+        <div class="grid grid-cols-4 gap-2">
+            <a href="dashboard.html" data-page="dashboard.html" class="nav-link text-center p-2 text-xs">
+                <div class="text-lg">📊</div>
+                <span>Dashboard</span>
+            </a>
+            <a href="data-ingestion.html" data-page="data-ingestion.html" class="nav-link text-center p-2 text-xs">
+                <div class="text-lg">📥</div>
+                <span>Data</span>
+            </a>
+            <a href="ai-analysis.html" data-page="ai-analysis.html" class="nav-link text-center p-2 text-xs">
+                <div class="text-lg">🤖</div>
+                <span>AI</span>
+            </a>
+            <a href="reports.html" data-page="reports.html" class="nav-link text-center p-2 text-xs">
+                <div class="text-lg">📄</div>
+                <span>Reports</span>
+            </a>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

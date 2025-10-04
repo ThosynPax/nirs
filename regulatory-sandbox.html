@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regulatory Sandbox - NIRS Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <nav class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <a href="dashboard.html" class="text-gray-500 hover:text-gray-700">← Back to Dashboard</a>
+                    <div class="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">NIRS</span>
+                    </div>
+                    <h1 class="text-lg font-semibold text-gray-900">Regulatory Sandbox</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-700" id="userName">Loading...</span>
+                    <button onclick="AuthManager.logout()" class="text-sm bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition-colors">Logout</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="mb-8 fade-in">
+            <h1 class="text-3xl font-bold text-gray-900">🧪 Regulatory Sandbox</h1>
+            <p class="text-gray-600 mt-2">Safe testing environment for new financial products and regulations</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Test Scenarios -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">Test Scenarios</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                                    <span class="text-red-600">💰</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-900">Money Laundering Pattern</h3>
+                                    <p class="text-sm text-gray-600">Test AML detection systems</p>
+                                </div>
+                            </div>
+                            <button onclick="runTest('money_laundering')" class="w-full bg-red-600 text-white py-2 rounded text-sm hover:bg-red-700">
+                                Run Test
+                            </button>
+                        </div>
+
+                        <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                    <span class="text-blue-600">🌍</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-900">Cross-border Compliance</h3>
+                                    <p class="text-sm text-gray-600">Test international regulations</p>
+                                </div>
+                            </div>
+                            <button onclick="runTest('cross_border')" class="w-full bg-blue-600 text-white py-2 rounded text-sm hover:bg-blue-700">
+                                Run Test
+                            </button>
+                        </div>
+
+                        <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                                    <span class="text-purple-600">🔗</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-900">Digital Asset Risk</h3>
+                                    <p class="text-sm text-gray-600">Test crypto compliance</p>
+                                </div>
+                            </div>
+                            <button onclick="runTest('digital_assets')" class="w-full bg-purple-600 text-white py-2 rounded text-sm hover:bg-purple-700">
+                                Run Test
+                            </button>
+                        </div>
+
+                        <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                    <span class="text-green-600">🏛️</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-900">New Regulation Impact</h3>
+                                    <p class="text-sm text-gray-600">Test policy changes</p>
+                                </div>
+                            </div>
+                            <button onclick="runTest('regulation_impact')" class="w-full bg-green-600 text-white py-2 rounded text-sm hover:bg-green-700">
+                                Run Test
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Custom Test Creation -->
+                    <div class="border-t pt-4">
+                        <h3 class="font-semibold text-gray-900 mb-3">Create Custom Test</h3>
+                        <div class="space-y-3">
+                            <input type="text" id="testName" placeholder="Test Name" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            <textarea id="testDescription" placeholder="Test Description" class="w-full px-3 py-2 border border-gray-300 rounded-lg h-20"></textarea>
+                            <button onclick="createCustomTest()" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">
+                                Create Test
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simulation Results -->
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">Simulation Results</h2>
+                    <div id="simulationResults" class="space-y-4">
+                        <div class="text-center py-8 text-gray-500">
+                            <div class="text-4xl mb-2">🧪</div>
+                            <p>Run a test scenario to see results here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sandbox Statistics -->
+            <div class="space-y-6">
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">📊 Sandbox Statistics</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Tests Run Today</span>
+                            <span class="font-semibold" id="testsToday">0</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Successful Tests</span>
+                            <span class="font-semibold text-green-600" id="successfulTests">0</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Failed Tests</span>
+                            <span class="font-semibold text-red-600" id="failedTests">0</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Avg. Test Duration</span>
+                            <span class="font-semibold" id="avgDuration">0s</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">⚙️ Environment Settings</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">Data Isolation</span>
+                            <span class="text-green-600 text-sm">✅ Active</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">Risk Containment</span>
+                            <span class="text-green-600 text-sm">✅ Enabled</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">Auto Rollback</span>
+                            <span class="text-green-600 text-sm">✅ Active</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">Real-time Monitoring</span>
+                            <span class="text-yellow-600 text-sm">🔄 Partial</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">🔔 Recent Activity</h3>
+                    <div id="sandboxActivity" class="space-y-2">
+                        <!-- Activity will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/regulatory-sandbox.js"></script>
+</body>
+</html>

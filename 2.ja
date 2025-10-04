@@ -1,0 +1,278 @@
+Frontend
+Main React App/Template 
+
+import { useState, useEffect, useRef } from 'react';
+import Chart from 'chart.js/auto';
+import { Network } from 'vis-network';
+import './index.css';
+
+function App() {
+  const [currentPage, setCurrentPage] = useState('Home');
+  const [messages, setMessages] = useState({});
+  const [dataStore, setDataStore] = useState([]);
+  const chartRef = useRef(null);
+  const networkRef = useRef(null);
+
+  const fetchData = async () => {
+    const res = await fetch('http://localhost:5000/api/data');
+    const data = await res.json();
+    setDataStore(data);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // Data Ingestion
+  function DataIngestion() {
+    const [jsonInput, setJsonInput] = useState('');
+    const handleIngest = async () => {
+      try {
+        const res = await fetch('http://localhost:5000/api/ingest', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: jsonInput
+        });
+        const result = await res.json();
+        setMessages({ ...messages, ingestion: { type: 'success', text: result.message } });
+        fetchData();
+      } catch (e) {
+        setMessages({ ...messages, ingestion: { type: 'error', text: 'Invalid JSON' } });
+      }
+    };
+
+    return (
+      <div className="p-4">
+        <h2 className="text-2xl font-bold">API-First Regulatory Reporting</h2>
+        <textarea className="w-full p-2 border rounded" value={jsonInput} onChange={e => setJsonInput(e.target.value)} placeholder='e.g. {"transaction_id": [1,2], "amount": [1000,2000000], "risk_score": [0.1,0.9]}' />
+        <button className="mt-2 bg-green-500 text-white p-2 rounded hover:bg-green-600" onClick={handleIngest}>Ingest Data</button>
+        {messages.ingestion && <p className={messages.ingestion.type === 'success' ? 'text-green-500' : 'text-red-500'}>{messages.ingestion.text}</p>}
+        <h3 className="mt-4 text-xl">Data Store</h3>
+        <table className="w-full border-collapse">
+          <thead><tr><th className="border p-2">ID</th><th className="border p-2">Amount</th><th className="border p-2">Risk Score</th><th className="border p-2">Timestamp</th><th className="border p-2">Signature</th></tr></thead>
+          <tbody>{dataStore.map((row, idx) => (
+            <tr key={idx}><td className="border p-2">{row.transaction_id}</td><td className="border p-2">{row.amount}</td><td className="border p-2">{row.risk_score}</td><td className="border p-2">{row.timestamp}</td><td className="border p-2">{row.signature}</td></tr>
+          ))}</tbody>
+        </table>
+      </div>
+    );
+  }
+
+  // AI Dashboard
+  function AIDashboard() {
+    const [results, setResults] = useState(null);
+    const chartInstance = useRef(null);
+
+    const runAnalysis = async () => {
+      try {
+        const res = await fetch('http://localhost:5000/api/ai-analysis', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ features: ['amount', 'risk_score'] })
+        });
+        const data = await res.json();
+        setResults(data);
+        setMessages({ ...messages, ai: { type: 'success', text: 'Analysis complete' } });
+      } catch (e) {
+        setMessages({ ...messages, ai: { type: 'error', text: 'Analysis failed' } });
+      }
+    };
+
+    useEffect(() => {
+      if (results && chartRef.current) {
+        if (chartInstance.current) chartInstance.current.destroy();
+        chartInstance.current = new Chart(chartRef.current, {
+          type: 'bar',
+          data: {
+            labels: ['Amount', 'Risk Score', 'Timestamp', 'Sig1', 'Sig2'],
+            datasets: [{ label: 'Feature Importance', data: results.explanations.feature_importance, backgroundColor: 'rgba(75,192,192,0.4)' }]
+          },
+          options: { scales: { y: { beginAtZero: true } } }
+        });
+      }
+    }, [results]);
+
+    return (
+      <div className="p-4">
+        <h2 className="text-2xl font-bold">AI Supervisory Dashboards</h2>
+        <button className="mt-2 bg-green-500 text-white p-2 rounded hover:bg-green-600" onClick={runAnalysis}>Run AI Analysis</button>
+        {messages.ai && <p className={messages.ai.type === 'success' ? 'text-green-500' : 'text-red-500'}>{messages.ai.text}</p>}
+        {results && <p>Predictions: {JSON.stringify(results.predictions)}</p>}
+        <div className="h-96"><canvas ref={chartRef}></canvas></div>
+      </div>
+    );
+  }
+
+  // Digital Asset Oversight
+  function DigitalAsset() {
+    const [contractInput, setContractInput] = useState('');
+    const [parseResults, setParseResults] = useState(null);
+
+    const handleParse = async () => {
+      try {
+        const res = await fetch('http://localhost:5000/api/digital-asset', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: contractInput
+        });
+        const data = await res.json();
+        setParseResults(data);
+        setMessages({ ...messages, digital: { type: 'success', text: data.summary } });
+
+        const container = networkRef.current;
+        new Network(container, data.graph, { physics: { enabled: true } });
+      } catch (e) {
+        setMessages({ ...messages, digital: { type: 'error', text: 'Invalid JSON' } });
+      }
+    };
+
+    return (
+      <div className="p-4">
+        <h2 className="text-2xl font-bold">Digital Asset Oversight Toolkit</h2>
+        <textarea className="w-full p-2 border rounded" value={contractInput} onChange={e => setContractInput(e.target.value)} placeholder='e.g. {"transactions": [{"from": "addr1", "to": "addr2", "value": 500}]}' />
+        <button className="mt-2 bg-green-500 text-white p-2 rounded hover:bg-green-600" onClick={handleParse}>Parse Contract</button>
+        {messages.digital && <p className={messages.digital.type === 'success' ? 'text-green-500' : 'text-red-500'}>{messages.digital.text}</p>}
+        {parseResults && <p>Anomalies: {JSON.stringify(parseResults.anomalies)}</p>}
+        <div className="h-96 border" ref={networkRef}></div>
+      </div>
+    );
+  }
+
+  // Privacy & Cyber Resilience
+  function PrivacyCyber() {
+    const [threatInput, setThreatInput] = useState('');
+    const [threatResults, setThreatResults] = useState(null);
+
+    const simulateFederated = async () => {
+      const res = await fetch('http://localhost:5000/api/federated', { method: 'POST' });
+      const data = await res.json();
+      setMessages({ ...messages, privacy: { type: 'success', text: data.message } });
+    };
+
+    const detectThreat = async () => {
+      const res = await fetch('http://localhost:5000/api/cyber-threat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: threatInput })
+      });
+      setThreatResults(await res.json());
+    };
+
+    return (
+      <div className="p-4">
+        <h2 className="text-2xl font-bold">Privacy-Preserving & Cyber Modules</h2>
+        <button className="mt-2 bg-green-500 text-white p-2 rounded hover:bg-green-600" onClick={simulateFederated}>Simulate Federated Learning</button>
+        {messages.privacy && <p className={messages.privacy.type === 'success' ? 'text-green-500' : 'text-red-500'}>{messages.privacy.text}</p>}
+        <input className="w-full p-2 border rounded" value={threatInput} onChange={e => setThreatInput(e.target.value)} placeholder="Enter text for threat detection" />
+        <button className="mt-2 bg-green-500 text-white p-2 rounded hover:bg-green-600" onClick={detectThreat}>Detect Threats</button>
+        {threatResults && <p>Risk Level: {threatResults.risk_level} | Threats: {threatResults.threats.join(', ')}</p>}
+      </div>
+    );
+  }
+
+  // Cross-Border Integration
+  function CrossBorder() {
+    const [partnerInput, setPartnerInput] = useState('');
+
+    const handleExchange = async () => {
+      try {
+        const res = await fetch('http://localhost:5000/api/cross-border', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: partnerInput
+        });
+        const data = await res.json();
+        setMessages({ ...messages, cross: { type: 'success', text: data.message } });
+        fetchData();
+      } catch (e) {
+        setMessages({ ...messages, cross: { type: 'error', text: 'Invalid JSON' } });
+      }
+    };
+
+    return (
+      <div className="p-4">
+        <h2 className="text-2xl font-bold">Cross-Border Supervisory Integration</h2>
+        <textarea className="w-full p-2 border rounded" value={partnerInput} onChange={e => setPartnerInput(e.target.value)} placeholder='e.g. {"transaction_id": [3,4], "amount": [3000,4000]}' />
+        <button className="mt-2 bg-green-500 text-white p-2 rounded hover:bg-green-600" onClick={handleExchange}>Exchange Data</button>
+        {messages.cross && <p className={messages.cross.type === 'success' ? 'text-green-500' : 'text-red-500'}>{messages.cross.text}</p>}
+      </div>
+    );
+  }
+
+  // KPIs & Reporting
+  function KPIs() {
+    const [kpis, setKpis] = useState(null);
+
+    const fetchKpis = async () => {
+      const res = await fetch('http://localhost:5000/api/kpis');
+      setKpis(await res.json());
+    };
+
+    const handleGenerateReport = async () => {
+      const res = await fetch('http://localhost:5000/api/kpis');
+      const kpis = await res.json();
+      const report = `NIRS Report\nDate: ${new Date().toISOString()}\n${JSON.stringify(kpis, null, 2)}`;
+      const blob = new Blob([report], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'nirs_report.txt';
+      a.click();
+    };
+
+    useEffect(() => {
+      fetchKpis();
+    }, []);
+
+    return (
+      <div className="p-4">
+        <h2 className="text-2xl font-bold">Key Performance Indicators & Reporting</h2>
+        <button className="mt-2 bg-green-500 text-white p-2 rounded hover:bg-green-600" onClick={handleGenerateReport}>Generate Leadership Report</button>
+        {kpis && (
+          <table className="w-full border-collapse">
+            <thead><tr><th className="border p-2">Metric</th><th className="border p-2">Value</th></tr></thead>
+            <tbody>
+              <tr><td>Connected Institutions (%)</td><td>{kpis.connected_institutions}</td></tr>
+              <tr><td>Anomaly Detection Speed (s)</td><td>{kpis.anomaly_detection_speed}</td></tr>
+              <tr><td>Compliance Reduction (%)</td><td>{kpis.compliance_reduction}</td></tr>
+              <tr><td>Anomalies Detected</td><td>{kpis.anomalies_detected}</td></tr>
+            </tbody>
+          </table>
+        )}
+      </div>
+    );
+  }
+
+  const pages = {
+    Home: () => <div className="p-4"><h2 className="text-2xl font-bold">Welcome to NIRS Prototype</h2><p>Select a module from the navigation.</p></div>,
+    DataIngestion,
+    AIDashboard,
+    DigitalAsset,
+    PrivacyCyber,
+    CrossBorder,
+    KPIs
+  };
+
+  const PageComponent = pages[currentPage];
+
+  return (
+    <div className="max-w-6xl mx-auto">
+      <div className="bg-blue-900 text-white p-6 rounded-t-lg text-center">
+        <h1 className="text-3xl font-bold">Nigeria Integrated Regulatory System (NIRS)</h1>
+        <p>Central Bank of Nigeria - SupTech & RegTech Platform</p>
+      </div>
+      <div className="flex justify-center bg-gray-200 p-4">
+        {Object.keys(pages).map(page => (
+          <button key={page} className="m-2 p-2 bg-blue-500 text-white rounded hover:bg-blue-600" onClick={() => setCurrentPage(page)}>
+            {page.replace(/([A-Z])/g, ' $1').trim()}
+          </button>
+        ))}
+      </div>
+      <div className="bg-white p-6 rounded-b-lg shadow">
+        <PageComponent />
+      </div>
+    </div>
+  );
+}
+
+export default App;
